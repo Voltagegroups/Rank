@@ -1,0 +1,6 @@
+# {NAME} = Nom du joueur
+# {PREFIX} = Prefix du rank du joueur
+# {RANK} = Rank du joueur
+
+annonce-rank: "§7[§c!§7] {NAME} §6a obtenu le grade §7{PREFIX}"
+basic-rank: "Player"
