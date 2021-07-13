@@ -54,8 +54,8 @@ class Rank{
         $config = new Config(self::getPlugin()->getDataFolder() . "Ranks/" . $rank . ".yml", Config::YAML);
         $config->set("prefix", $prefix);
         $config->set("permission", array());
-        $config->set("gametag-prefix", "§7{NAME} - {FAC} [{PREFIX}" . "§r§7]");
-        $config->set("chat-prefix", "§f[§7{FAC}§e{FACRANK}§f]§7 {PREFIX}§r§7 {NAME} §f> §7{MSG}");
+        $config->set("gametag-prefix", "§7{NAME} - {FAC_NAME} [{PREFIX}" . "§r§7]");
+        $config->set("chat-prefix", "§f[§7{FAC_NAME}§e{FAC_RANK}§f]§7 {PREFIX}§r§7 {NAME} §f> §7{MSG}");
         $config->save();
     }
 
@@ -124,7 +124,7 @@ class Rank{
         $name = $player->getName();
         $rank = self::getRank($name);
         $prefix = self::getGameTagPrefix($rank);
-        $replace = Main::setReplace($prefix, $name);
+        $replace = Main::setReplace($prefix, $player);
         $player->setNameTag($replace);
     }
 
