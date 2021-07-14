@@ -1,5 +1,7 @@
 name: Rank
 main: rank\Main
-version: 0.0.1
+version: 0.2
 api: 3.0.0
-author: RedTV
+authors:
+  - VirVoltaSurMC
+  - AyzrixYTB

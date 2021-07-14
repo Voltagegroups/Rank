@@ -1,6 +1,16 @@
 # {NAME} = Nom du joueur
 # {PREFIX} = Prefix du rank du joueur
 # {RANK} = Rank du joueur
+# {FAC_NAME} = Faction du joueur
+# {FAC_RANK} = Grade du joueur dans sa faction
 
+faction_system: true
 annonce-rank: "§7[§c!§7] {NAME} §6a obtenu le grade §7{PREFIX}"
 basic-rank: "Player"
+
+no-faction: "..."
+
+#ne marche pas si le plugins a deja un systeme de role
+leader-faction-rank: "**"
+officer-faction-rank: "*"
+no-faction-rank: ""

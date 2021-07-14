@@ -28,13 +28,19 @@ class RankCommand extends Command{
                 case "set":
                     if (isset($args[2])) {
                         if (Rank::existRank($args[2])) {
-                            $name = Server::getInstance()->getPlayer($args[1]) ? Server::getInstance()->getPlayer($args[1])->getName() : $args[1];
-                            Rank::setRank($name, $args[2]);
-                            $annonce = Main::getData()->get("annonce-rank");
-                            if ($name instanceof Player) {
-                                Rank::addPermByRankToPlayer($name, Rank::getRank($name));
+                            $player = Server::getInstance()->getPlayer($args[1]);
+                            $name = $args[1];
+                            if ($player instanceof Player) {
+                                $name = $player->getName();
+                                Rank::setRank($name, $args[2]);
+                                $sender->sendMessage("§7[§c!§7] §a" . "Le rank est intégré");
+                                $annonce = Main::getData()->get("annonce-rank");
+                                Server::getInstance()->broadcastMessage(Main::setReplace($annonce, $player));
+                                //after reset Replace systeme
+                            } else {
+                                Rank::setRank($name, $args[2]);
+                                $sender->sendMessage("§7[§c!§7] §a" . "Le rank est intégré");
                             }
-                            Server::getInstance()->broadcastMessage(Main::setReplace($annonce, $name));
                         } else {
                             $sender->sendMessage("§7[§c!§7] §c" . "Le rank " . $args[2] . " n'existe pas");
                         }

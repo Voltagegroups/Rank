@@ -41,7 +41,6 @@ class RankListener implements Listener{
         $rank = Rank::getRank($name);
         $message = $event->getMessage();
         $replace = Rank::getChatPrefix($rank);
-        $event->setFormat(Main::setReplace($replace,$name,$message));
+        $event->setFormat(Main::setReplace($replace,$player,$message));
     }
-
 }

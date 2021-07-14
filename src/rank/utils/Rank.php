@@ -25,7 +25,13 @@ class Rank{
 
     public static function getRank(string $name) : ?string{
         $config = new Config(self::getPlugin()->getDataFolder()."players.yml",Config::YAML);
-        return $config->get($name);
+        $rank = $config->get($name);
+        if (!self::existRank($rank)) {
+            $rank = self::getDefaultRank();
+            self::setRank($name, $rank);
+            return $rank;
+        }
+        return $rank;
     }
 
     public static function setRank(string $name, string $rank){
@@ -36,6 +42,7 @@ class Rank{
             $player = self::getPlugin()->getServer()->getPlayer($name);
             if ($player instanceof Player) {
                 self::updateNameTag($player);
+                Rank::addPermByRankToPlayer($player, $rank);
             }
         }
     }
@@ -43,10 +50,6 @@ class Rank{
     public static function removeRank(string $rank){
         if (self::existRank($rank)) {
             unlink(self::getPlugin()->getDataFolder() . "Ranks/" . $rank . ".yml");
-            $player = self::getPlugin()->getServer()->getPlayer($name);
-            if ($player instanceof Player) {
-                self::updateNameTag($player);
-            }
         }
     }
 
@@ -54,8 +57,8 @@ class Rank{
         $config = new Config(self::getPlugin()->getDataFolder() . "Ranks/" . $rank . ".yml", Config::YAML);
         $config->set("prefix", $prefix);
         $config->set("permission", array());
-        $config->set("gametag-prefix", "§7{NAME} - {FAC} [{PREFIX}" . "§r§7]");
-        $config->set("chat-prefix", "§f[§7{FAC}§e{FACRANK}§f]§7 {PREFIX}§r§7 {NAME} §f> §7{MSG}");
+        $config->set("gametag-prefix", "§7{NAME} - {FAC_NAME} [{PREFIX}" . "§r§7]");
+        $config->set("chat-prefix", "§f[§7{FAC_NAME}§e{FAC_RANK}§f]§7 {PREFIX}§r§7 {NAME} §f> §7{MSG}");
         $config->save();
     }
 
@@ -124,7 +127,7 @@ class Rank{
         $name = $player->getName();
         $rank = self::getRank($name);
         $prefix = self::getGameTagPrefix($rank);
-        $replace = Main::setReplace($prefix, $name);
+        $replace = Main::setReplace($prefix, $player);
         $player->setNameTag($replace);
     }
 
@@ -132,6 +135,10 @@ class Rank{
         foreach (Server::getInstance()->getOnlinePlayers() as $player) {
             self::updateNameTag($player);
         }
+    }
+
+    public static function getDefaultRank(){
+        return Main::getData()->get("basic-rank");
     }
 
     public static function setDefaultRank(string $rank){
