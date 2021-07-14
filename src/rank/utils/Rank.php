@@ -25,7 +25,13 @@ class Rank{
 
     public static function getRank(string $name) : ?string{
         $config = new Config(self::getPlugin()->getDataFolder()."players.yml",Config::YAML);
-        return $config->get($name);
+        $rank = $config->get($name);
+        if (!self::existRank($rank)) {
+            $rank = self::getDefaultRank();
+            self::setRank($name, $rank);
+            return $rank;
+        }
+        return $rank;
     }
 
     public static function setRank(string $name, string $rank){
@@ -129,6 +135,10 @@ class Rank{
         foreach (Server::getInstance()->getOnlinePlayers() as $player) {
             self::updateNameTag($player);
         }
+    }
+
+    public static function getDefaultRank(){
+        return Main::getData()->get("basic-rank");
     }
 
     public static function setDefaultRank(string $rank){

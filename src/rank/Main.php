@@ -28,7 +28,7 @@ class Main extends PluginBase{
     /**
      * @return FactionBase|null
      */
-    public static function getFactionSysteme() : null|FactionBase {
+    public static function getFactionSysteme() : ?FactionBase {
         return self::$faction;
     }
 
