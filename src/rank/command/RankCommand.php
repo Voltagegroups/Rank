@@ -31,9 +31,6 @@ class RankCommand extends Command{
                             $name = Server::getInstance()->getPlayer($args[1]) ? Server::getInstance()->getPlayer($args[1])->getName() : $args[1];
                             Rank::setRank($name, $args[2]);
                             $annonce = Main::getData()->get("annonce-rank");
-                            if ($name instanceof Player) {
-                                Rank::addPermByRankToPlayer($name, Rank::getRank($name));
-                            }
                             Server::getInstance()->broadcastMessage(Main::setReplace($annonce, $name));
                         } else {
                             $sender->sendMessage("§7[§c!§7] §c" . "Le rank " . $args[2] . " n'existe pas");

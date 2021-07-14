@@ -36,6 +36,7 @@ class Rank{
             $player = self::getPlugin()->getServer()->getPlayer($name);
             if ($player instanceof Player) {
                 self::updateNameTag($player);
+                Rank::addPermByRankToPlayer($player, $rank);
             }
         }
     }
@@ -43,10 +44,6 @@ class Rank{
     public static function removeRank(string $rank){
         if (self::existRank($rank)) {
             unlink(self::getPlugin()->getDataFolder() . "Ranks/" . $rank . ".yml");
-            $player = self::getPlugin()->getServer()->getPlayer($name);
-            if ($player instanceof Player) {
-                self::updateNameTag($player);
-            }
         }
     }
 

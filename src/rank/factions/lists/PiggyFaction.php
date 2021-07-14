@@ -1,33 +1,37 @@
 <?php
 
-namespace rank\factions;
+namespace rank\factions\lists;
 
 use DaPigGuy\PiggyFactions\players\PlayerManager;
 use pocketmine\Player;
+use rank\factions\FactionBase;
+use rank\Main;
 
-class PiggyFaction {
+class PiggyFaction extends FactionBase {
 
     /**
-     * @param Player $player
+     * @param string $player
      * @return string
      */
-    public function getPlayerFaction(Player $player): string {
-        $member = PlayerManager::getInstance()->getPlayer($player);
+    public function getPlayerFaction(string $player): string {
+        $member = PlayerManager::getInstance()->getPlayerByName($player);
         $faction = $member === null ? null : $member->getFaction();
         if (!is_null($faction)) {
             return $faction->getName();
-        } else return "...";
+        }
+        return Main::getData()->get("no-faction");
     }
 
     /**
      * @param Player $player
      * @return string
      */
-    public function getPlayerRank(Player $player): string {
+    public function getPlayerRank(string $player): string {
         $member = PlayerManager::getInstance()->getPlayer($player);
         $faction = $member === null ? null : $member->getFaction();
         if (!is_null($faction)) {
             return $member->getRole();
-        } else return "...";
+        }
+        return Main::getData()->get("no-faction-rank");
     }
 }

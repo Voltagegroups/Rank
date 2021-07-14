@@ -43,5 +43,4 @@ class RankListener implements Listener{
         $replace = Rank::getChatPrefix($rank);
         $event->setFormat(Main::setReplace($replace,$player,$message));
     }
-
 }
