@@ -12,6 +12,7 @@ use rank\factions\lists\FactionsPE;
 use rank\factions\lists\FactionsPro;
 use rank\factions\lists\PiggyFaction;
 use rank\factions\lists\SimpleFaction;
+use rank\provider\lists\Json;
 use rank\provider\lists\Yaml;
 use rank\provider\ProviderBase;
 
@@ -19,9 +20,9 @@ class Main extends PluginBase
 {
     private static Config $config;
 
-    public static ?FactionBase $faction = null;
+    private static ?FactionBase $faction = null;
 
-    public static ?ProviderBase $provider = null;
+    private static ?ProviderBase $provider = null;
 
     public static function getFactionSysteme() : ?FactionBase {
         return self::$faction;
@@ -45,7 +46,7 @@ class Main extends PluginBase
         self::$config = new Config($this->getDataFolder().'config.yml', Config::YAML);
         $this->initProvider();
 
-        if (self::getProviderSysteme()->existRank(self::getProviderSysteme()->getDefaultRank())) {
+        if (!self::getProviderSysteme()->existRank(self::getProviderSysteme()->getDefaultRank())) {
             $this->getLogger()->notice("Default rank creation");
             self::getProviderSysteme()->addRank(self::getProviderSysteme()->getDefaultRank(), TextFormat::BOLD . self::getProviderSysteme()->getDefaultRank());
         }
@@ -63,14 +64,14 @@ class Main extends PluginBase
         }
         $prefix = self::getProviderSysteme()->getPrefix($rank);
         if (self::$faction) {
-            return str_replace(["{NAME}", "{RANK}", "{PREFIX}", "{MSG}", "{FAC_NAME}", "{FAC_RANK}"], [$name, $rank, $prefix, $msg, self::$faction->getPlayerFaction($player->getName()), self::$faction->getPlayerRank($player->getName())], $replace);
+            return str_replace(["{NAME}", "{RANK}", "{PREFIX}", "{MSG}", "{FAC_NAME}", "{FAC_RANK}"], [$name, $rank, $prefix, $msg, self::getFactionSysteme()->getPlayerFaction($player->getName()), self::getFactionSysteme()->getPlayerRank($player->getName())], $replace);
         } else {
             return str_replace(["{NAME}", "{RANK}", "{PREFIX}", "{MSG}"], [$name, $rank, $prefix, $msg], $replace);
         }
     }
 
     public function initFaction() : void {
-        $this->getLogger()->notice("Loading the Faction system");
+        $this->getLogger()->info("Loading the Faction system");
         if ($this->getConfig()->get("faction_system") === true) {
             foreach ($this->getServer()->getPluginManager()->getPlugins() as $plugin) {
                 if ($plugin instanceof \BlockHorizons\FactionsPE\FactionsPE) {
@@ -99,20 +100,27 @@ class Main extends PluginBase
     }
 
     public function initProvider() : void {
-        $this->getLogger()->notice("Loading the Provider system");
+        $this->getLogger()->info("Loading the Provider system");
         switch (strtolower($this->getConfig()->get("database-provider"))) {
             case "mysql":
                 break;
             case "json":
+                $this->getLogger()->notice("The assigned provider is JSON");
+                self::$provider = new Json($this);
+                self::$provider->load();
                 break;
             case "yaml":
-                $this->getLogger()->info("The assigned provider is YAML");
+                $this->getLogger()->notice("The assigned provider is YAML");
                 self::$provider = new Yaml($this);
                 self::$provider->load();
                 break;
             case "sqlite3":
                 break;
             default:
+                $this->getLogger()->critical("The provider system could not be loaded because it was not found");
+                $this->getLogger()->notice("The assigned provider is JSON");
+                self::$provider = new Json($this);
+                self::$provider->load();
                 break;
         }
     }

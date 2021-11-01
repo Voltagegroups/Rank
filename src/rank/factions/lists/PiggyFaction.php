@@ -19,7 +19,7 @@ class PiggyFaction extends FactionBase {
         if (!is_null($faction)) {
             return $faction->getName();
         }
-        return Main::getData()->get("no-faction");
+        return Main::getProviderSysteme()->getPrefixNoFaction();
     }
 
     /**
@@ -32,6 +32,6 @@ class PiggyFaction extends FactionBase {
         if (!is_null($faction)) {
             return $member->getRole();
         }
-        return Main::getData()->get("no-faction-rank");
+        return Main::getProviderSysteme()->getPrefixNoFactionRank();
     }
 }

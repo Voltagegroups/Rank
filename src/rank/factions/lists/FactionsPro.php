@@ -18,7 +18,7 @@ class FactionsPro extends FactionBase {
                 return $plugin->getFaction($player);
             }
         }
-        return Main::getData()->get("no-faction");
+        return Main::getProviderSysteme()->getPrefixNoFaction();
     }
 
     /**
@@ -30,12 +30,12 @@ class FactionsPro extends FactionBase {
         if ($plugin instanceof \FactionsPro\FactionMain) {
             if ($plugin->isInFaction($player)) {
                 if ($plugin->isOfficer($player)) {
-                    return Main::getData()->get("leader-faction-rank");
+                    return Main::getProviderSysteme()->getPrefixLeaderFactionRank();
                 } elseif ($plugin->isLeader($player)) {
-                    return Main::getData()->get("officer-faction-rank");
+                    return Main::getProviderSysteme()->getPrefixOfficerFactionRank();
                 }
             }
         }
-        return Main::getData()->get("no-faction-rank");
+        return Main::getProviderSysteme()->getPrefixNoFactionRank();
     }
 }

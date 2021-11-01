@@ -1,7 +1,11 @@
 # Finished & Planned Features
+- Json
+- Yaml
      
 # Unfinished
 - Mysql
-- Json
 - SQlite3
 - SubCommand
+- Optimise yaml config
+- Lang
+- Remove getData

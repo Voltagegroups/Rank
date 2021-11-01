@@ -17,7 +17,7 @@ class SimpleFaction extends FactionBase {
         if (FactionsAPI::isInFaction($player)) {
             return FactionsAPI::getFaction($player);
         }
-        return Main::getData()->get("no-faction");
+        return Main::getProviderSysteme()->getPrefixNoFaction();
     }
 
     /**
@@ -27,11 +27,11 @@ class SimpleFaction extends FactionBase {
     public function getPlayerRank(string $player): string {
         if (FactionsAPI::isInFaction($player)) {
             if (FactionsAPI::getRank($player) === "Leader") {
-                return Main::getData()->get("leader-faction-rank");
+                return Main::getProviderSysteme()->getPrefixLeaderFactionRank();
             } elseif (FactionsAPI::getRank($player) === "Officer") {
-                return Main::getData()->get("officer-faction-rank");
+                return Main::getProviderSysteme()->getPrefixOfficerFactionRank();
             }
         }
-        return Main::getData()->get("no-faction-rank");
+        return Main::getProviderSysteme()->getPrefixNoFactionRank();
     }
 }

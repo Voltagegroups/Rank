@@ -7,22 +7,22 @@ use pocketmine\utils\Config;
 use rank\Main;
 use rank\provider\ProviderBase;
 
-class Yaml extends ProviderBase
+class Json extends ProviderBase
 {
     private Config $player;
 
     public function load() : void {
         @mkdir($this->getPlugin()->getDataFolder()."Ranks/");
-        $this->player = new Config($this->getPlugin()->getDataFolder()."players.yml",Config::YAML);
+        $this->player = new Config($this->getPlugin()->getDataFolder()."players.json",Config::JSON);
     }
 
     public function getName() : string {
-        return "Yaml";
+        return "Json";
     }
 
     public function existRank(string $name) : bool {
-        if (file_exists($this->getPlugin()->getDataFolder() . "Ranks/" . $name . ".yml")) {
-            $config = new Config($this->getPlugin()->getDataFolder() . "Ranks/" . $name . ".yml", Config::YAML);
+        if (file_exists($this->getPlugin()->getDataFolder() . "Ranks/" . $name . ".json")) {
+            $config = new Config($this->getPlugin()->getDataFolder() . "Ranks/" . $name . ".json", Config::JSON);
             if ($config->exists("prefix") and
                 $config->exists("permission") and
                 $config->exists("gametag-prefix") and
@@ -60,12 +60,12 @@ class Yaml extends ProviderBase
 
     public function removeRank(string $rank) : void {
         if ($this->existRank($rank)) {
-            unlink($this->getPlugin()->getDataFolder() . "Ranks/" . $rank . ".yml");
+            unlink($this->getPlugin()->getDataFolder() . "Ranks/" . $rank . ".json");
         }
     }
 
     public function addRank(string $rank, string $prefix) : void {
-        $config = new Config($this->getPlugin()->getDataFolder() . "Ranks/" . $rank . ".yml", Config::YAML);
+        $config = new Config($this->getPlugin()->getDataFolder() . "Ranks/" . $rank . ".json", Config::JSON);
         $config->set("prefix", $prefix);
         $config->set("permission", array());
         $config->set("gametag-prefix", $this->defaultNameTag);
@@ -74,30 +74,30 @@ class Yaml extends ProviderBase
     }
 
     public function getPrefix(string $rank) : ?string{
-        $config = new Config($this->getPlugin()->getDataFolder()."Ranks/".$rank.".yml",Config::YAML);
+        $config = new Config($this->getPlugin()->getDataFolder()."Ranks/".$rank.".json",Config::JSON);
         return $config->get("prefix");
     }
 
     public function setPrefix(string $prefix, string $rank) : void {
-        $config = new Config($this->getPlugin()->getDataFolder()."Ranks/".$rank.".yml",Config::YAML);
+        $config = new Config($this->getPlugin()->getDataFolder()."Ranks/".$rank.".json",Config::JSON);
         $config->set("prefix", $prefix);
         $config->save();
     }
 
     public function existPerm(string $rank, string $perm) : bool {
-        $config = new Config($this->getPlugin()->getDataFolder()."Ranks/".$rank.".yml",Config::YAML);
+        $config = new Config($this->getPlugin()->getDataFolder()."Ranks/".$rank.".json",Config::JSON);
         $array = $config->get("permission");
         if (in_array($perm, $array)) return true;
         return false;
     }
 
     public function getPerms(string $rank) : ?array {
-        $config = new Config($this->getPlugin()->getDataFolder()."Ranks/".$rank.".yml",Config::YAML);
+        $config = new Config($this->getPlugin()->getDataFolder()."Ranks/".$rank.".json",Config::JSON);
         return $config->get("permission");
     }
 
     public function addPerm(string $rank, string $perm) : void {
-        $config = new Config($this->getPlugin()->getDataFolder()."Ranks/".$rank.".yml",Config::YAML);
+        $config = new Config($this->getPlugin()->getDataFolder()."Ranks/".$rank.".json",Config::JSON);
         $array = $config->get("permission");
         $array[] = $perm;
         $config->set("permission", $array);
@@ -105,7 +105,7 @@ class Yaml extends ProviderBase
     }
 
     public function removePerm(string $rank, string $perm) : void {
-        $config = new Config($this->getPlugin()->getDataFolder()."Ranks/".$rank.".yml",Config::YAML);
+        $config = new Config($this->getPlugin()->getDataFolder()."Ranks/".$rank.".json",Config::JSON);
         $array = $config->get("permission");
         unset($array[$perm]);
         $config->set("permission", $array);
@@ -113,23 +113,23 @@ class Yaml extends ProviderBase
     }
 
     public function getGameTagPrefix(string $rank) : ?string {
-        $config = new Config($this->getPlugin()->getDataFolder()."Ranks/".$rank.".yml",Config::YAML);
+        $config = new Config($this->getPlugin()->getDataFolder()."Ranks/".$rank.".json",Config::JSON);
         return $config->get("gametag-prefix");
     }
 
     public function setGameTagPrefix(string $rank, string $prefix) : void {
-        $config = new Config($this->getPlugin()->getDataFolder()."Ranks/".$rank.".yml",Config::YAML);
+        $config = new Config($this->getPlugin()->getDataFolder()."Ranks/".$rank.".json",Config::JSON);
         $config->set("gametag-prefix", $prefix);
         $config->save();
     }
 
     public function getChatPrefix(string $rank) : ?string {
-        $config = new Config($this->getPlugin()->getDataFolder()."Ranks/".$rank.".yml",Config::YAML);
+        $config = new Config($this->getPlugin()->getDataFolder()."Ranks/".$rank.".json",Config::JSON);
         return $config->get("chat-prefix");
     }
 
     public function setChatPrefix(string $rank, string $prefix) : void {
-        $config = new Config($this->getPlugin()->getDataFolder()."Ranks/".$rank.".yml",Config::YAML);
+        $config = new Config($this->getPlugin()->getDataFolder()."Ranks/".$rank.".json",Config::JSON);
         $config->set("chat-prefix", $prefix);
         $config->save();
     }
@@ -144,7 +144,7 @@ class Yaml extends ProviderBase
 
     public function addPermByRankToPlayer(Player $player, string $rank) : void {
         $this->updateNameTag($player);
-        $config = new Config($this->getPlugin()->getDataFolder()."Ranks/".$rank.".yml",Config::YAML);
+        $config = new Config($this->getPlugin()->getDataFolder()."Ranks/".$rank.".json",Config::JSON);
         $array = $config->get("permission");
         if (is_array($array)) {
             foreach ($array as $permission) {

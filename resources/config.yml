@@ -5,7 +5,7 @@
 # {FAC_RANK} = Grade du joueur dans sa faction
 
 #Json, Yaml, SQLite3, MySQL
-database-provider: Yaml
+database-provider: Json
 
 mysql:
   host: "localhost"
@@ -14,7 +14,7 @@ mysql:
   database: "rank"
 
 faction-system: true
-annonce-rank: "§7[§c!§7] {NAME} §6a obtenu le grade §7{PREFIX}"
+annonce-rank: "§7[§c!§7] {NAME} §6a obtenu le grade §7{PREFIX}" #paste to fra.ini
 basic-rank: "Player"
 
 no-faction: "..."
@@ -26,3 +26,5 @@ no-faction-rank: ""
 
 gametag-prefix-default: "§7{NAME} - {FAC_NAME} [{PREFIX}§r§7]"
 chat-prefix-default: "§f[§7{FAC_NAME}§e{FAC_RANK}§f]§7 {PREFIX}§r§7 {NAME} §f> §7{MSG}"
+
+lang: "fra"

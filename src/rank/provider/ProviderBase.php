@@ -3,9 +3,26 @@
 namespace rank\provider;
 
 use pocketmine\player\Player;
+use rank\Main;
 
 abstract class ProviderBase
 {
+    private Main $plugin;
+
+    protected string $defaultNameTag;
+
+    protected string $defaultChat;
+    
+    public function __construct(Main $pg) {
+        $this->plugin = $pg;
+        $this->defaultNameTag = Main::getData()->get("gametag-prefix-default");
+        $this->defaultChat = Main::getData()->get("chat-prefix-default");
+    }
+
+    protected function getPlugin() : Main {
+        return $this->plugin;
+    }
+
     abstract public function load() : void;
 
     abstract public function getName() : string;
@@ -42,11 +59,76 @@ abstract class ProviderBase
 
     abstract public function updateNameTag(Player $player) : void;
 
-    abstract public function updateAllNameTag() : void;
-
-    abstract public function getDefaultRank() : string;
-
-    abstract public function setDefaultRank(string $rank) : void;
-
     abstract public function addPermByRankToPlayer(Player $player, string $rank) : void;
+    
+    public function updateAllNameTag() : void {
+        foreach ($this->getPlugin()->getServer()->getOnlinePlayers() as $player) {
+            $this->updateNameTag($player);
+        }
+    }
+
+    public function getDefaultRank() : string {
+        return Main::getData()->get("basic-rank");
+    }
+
+    public function setDefaultRank(string $rank) : void {
+        Main::getData()->set("basic-rank", $rank);
+        Main::getData()->save();
+    }
+
+    public function getPrefixNoFaction(): string
+    {
+        if (!$prefix = Main::getData()->get("no-faction")) {
+            $prefix = "...";
+            $this->setPrefixNoFaction($prefix);
+        }
+        return $prefix;
+    }
+
+    public function setPrefixNoFaction(string $prefix) : void
+    {
+        Main::getData()->set("no-faction", $prefix);
+    }
+
+    public function getPrefixNoFactionRank(): string
+    {
+        if (!$prefix = Main::getData()->get("no-faction-rank")) {
+            $prefix = "";
+            $this->setPrefixNoFactionRank($prefix);
+        }
+        return $prefix;
+    }
+
+    public function setPrefixNoFactionRank(string $prefix) : void
+    {
+        Main::getData()->set("no-faction-rank", $prefix);
+    }
+
+    public function getPrefixLeaderFactionRank(): string
+    {
+        if (!$prefix = Main::getData()->get("leader-faction-rank")) {
+            $prefix = "**";
+            $this->setPrefixLeaderFactionRank($prefix);
+        }
+        return $prefix;
+    }
+
+    public function setPrefixLeaderFactionRank(string $prefix) : void
+    {
+        Main::getData()->set("leader-faction-rank", $prefix);
+    }
+
+    public function getPrefixOfficerFactionRank(): string
+    {
+        if (!$prefix = Main::getData()->get("officer-faction-rank")) {
+            $prefix = "*";
+            $this->setPrefixOfficerFactionRank($prefix);
+        }
+        return $prefix;
+    }
+
+    public function setPrefixOfficerFactionRank(string $prefix) : void
+    {
+        Main::getData()->set("officer-faction-rank", $prefix);
+    }
 }

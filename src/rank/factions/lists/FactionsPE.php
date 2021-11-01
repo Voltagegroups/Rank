@@ -21,7 +21,7 @@ class FactionsPE extends FactionBase
                 return $faction->getName();
             }
         }
-        return Main::getData()->get("no-faction");
+        return Main::getProviderSysteme()->getPrefixNoFaction();
     }
 
     /**
@@ -36,6 +36,6 @@ class FactionsPE extends FactionBase
                 return $member->getRole();
             }
         }
-        return Main::getData()->get("no-faction-rank");
+        return Main::getProviderSysteme()->getPrefixNoFactionRank();
     }
 }
