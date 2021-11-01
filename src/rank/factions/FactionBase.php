@@ -1,14 +1,12 @@
 <?php
 
-
 namespace rank\factions;
-
 
 use pocketmine\plugin\Plugin;
 
 abstract class FactionBase
 {
-    private $plugin;
+    private Plugin $plugin;
 
     public function getPlugin() : Plugin{
         return $this->plugin;

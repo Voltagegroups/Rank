@@ -24,23 +24,18 @@ class RankListener implements Listener{
     public function onJoin(PlayerJoinEvent $event){
         $player = $event->getPlayer();
         $name = $player->getName();
-        Rank::addPermByRankToPlayer($player, Rank::getRank($name));
-    }
-
-    public function onPreJoin(PlayerPreLoginEvent $event){
-        $player = $event->getPlayer();
-        $name = $player->getName();
-        if (Rank::getRank($name) == "") {
-            Rank::setRank($name, Main::getData()->get("basic-rank"));
+        if (Main::getProviderSysteme()->getRank($name) == "") {
+            Main::getProviderSysteme()->setRank($name, Main::getProviderSysteme()->getDefaultRank());
         }
+        Main::getProviderSysteme()->addPermByRankToPlayer($player, Main::getProviderSysteme()->getRank($name));
     }
 
     public function onChat(PlayerChatEvent $event){
         $player = $event->getPlayer();
         $name = $player->getName();
-        $rank = Rank::getRank($name);
+        $rank = Main::getProviderSysteme()->getRank($name);
         $message = $event->getMessage();
-        $replace = Rank::getChatPrefix($rank);
+        $replace = Main::getProviderSysteme()->getChatPrefix($rank);
         $event->setFormat(Main::setReplace($replace,$player,$message));
     }
 }

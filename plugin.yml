@@ -1,7 +1,29 @@
 name: Rank
 main: rank\Main
 version: 0.2
-api: 3.0.0
+api: 4.0.0
 authors:
   - VirVoltaSurMC
   - AyzrixYTB
+
+permissions:
+  command.rank.access:
+    default: op
+  command.rank.set:
+    default: op
+  command.rank.add:
+    default: op
+  command.rank.remove:
+    default: op
+  command.rank.list:
+    default: op
+  command.rank.addperm:
+    default: op
+  command.rank.removeperm:
+    default: op
+  command.rank.setprefixchat:
+    default: op
+  command.rank.setprefixtag:
+    default: op
+  command.rank.default:
+    default: op
