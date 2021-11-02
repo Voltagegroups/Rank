@@ -72,7 +72,7 @@ class Main extends PluginBase
 
     public function initFaction() : void {
         $this->getLogger()->info("Loading the Faction system");
-        if ($this->getConfig()->get("faction_system") === true) {
+        if ($this->getConfig()->get("faction-system") === true) {
             foreach ($this->getServer()->getPluginManager()->getPlugins() as $plugin) {
                 if ($plugin instanceof \BlockHorizons\FactionsPE\FactionsPE) {
                     $this->getLogger()->notice("The FactionPE faction has been loaded");
@@ -95,8 +95,8 @@ class Main extends PluginBase
                     return;
                 }
             }
-            $this->getLogger()->critical("The faction system has been cancelled because it has not been found");
         }
+        $this->getLogger()->critical("The faction system has been cancelled because it has not been found");
     }
 
     public function initProvider() : void {
