@@ -1,6 +1,0 @@
----
-prefix: Player
-permission: []
-gametag-prefix: §7[{PREFIX}] - {NAME}
-chat-prefix: §7[{PREFIX}] - {NAME} §f> §7{MSG}
-...

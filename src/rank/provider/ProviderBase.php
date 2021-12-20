@@ -8,15 +8,9 @@ use rank\Main;
 abstract class ProviderBase
 {
     private Main $plugin;
-
-    protected string $defaultNameTag;
-
-    protected string $defaultChat;
     
     public function __construct(Main $pg) {
         $this->plugin = $pg;
-        $this->defaultNameTag = Main::getData()->get("gametag-prefix-default");
-        $this->defaultChat = Main::getData()->get("chat-prefix-default");
     }
 
     protected function getPlugin() : Main {
@@ -76,7 +70,7 @@ abstract class ProviderBase
         Main::getData()->save();
     }
 
-    public function getPrefixNoFaction(): string
+    public function getPrefixNoFaction() : string
     {
         if (!$prefix = Main::getData()->get("no-faction")) {
             $prefix = "...";
@@ -90,7 +84,7 @@ abstract class ProviderBase
         Main::getData()->set("no-faction", $prefix);
     }
 
-    public function getPrefixNoFactionRank(): string
+    public function getPrefixNoFactionRank() : string
     {
         if (!$prefix = Main::getData()->get("no-faction-rank")) {
             $prefix = "";
@@ -104,7 +98,7 @@ abstract class ProviderBase
         Main::getData()->set("no-faction-rank", $prefix);
     }
 
-    public function getPrefixLeaderFactionRank(): string
+    public function getPrefixLeaderFactionRank() : string
     {
         if (!$prefix = Main::getData()->get("leader-faction-rank")) {
             $prefix = "**";
@@ -118,7 +112,7 @@ abstract class ProviderBase
         Main::getData()->set("leader-faction-rank", $prefix);
     }
 
-    public function getPrefixOfficerFactionRank(): string
+    public function getPrefixOfficerFactionRank() : string
     {
         if (!$prefix = Main::getData()->get("officer-faction-rank")) {
             $prefix = "*";
@@ -130,5 +124,33 @@ abstract class ProviderBase
     public function setPrefixOfficerFactionRank(string $prefix) : void
     {
         Main::getData()->set("officer-faction-rank", $prefix);
+    }
+
+    public function getPrefixDefaultNameTag() : string
+    {
+        if (!$prefix = Main::getData()->get("gametag-prefix-default")) {
+            $prefix = "§7{NAME} - {FAC_NAME} [{PREFIX}§r§7]";
+            $this->setPrefixDefaultNameTag($prefix);
+        }
+        return $prefix;
+    }
+
+    public function setPrefixDefaultNameTag(string $prefix) : void
+    {
+        Main::getData()->set("gametag-prefix-default", $prefix);
+    }
+
+    public function getPrefixDefaultChat() : string
+    {
+        if (!$prefix = Main::getData()->get("chat-prefix-default")) {
+            $prefix = "§f[§7{FAC_NAME}§e{FAC_RANK}§f]§7 {PREFIX}§r§7 {NAME} §f> §7{MSG}";
+            $this->setPrefixDefaultChat($prefix);
+        }
+        return $prefix;
+    }
+
+    public function setPrefixDefaultChat(string $prefix) : void
+    {
+        Main::getData()->set("chat-prefix-default", $prefix);
     }
 }

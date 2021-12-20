@@ -4,9 +4,7 @@ namespace rank\event;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerJoinEvent;
-use pocketmine\event\player\PlayerPreLoginEvent;
 use rank\Main;
-use rank\utils\Rank;
 
 class RankListener implements Listener{
 

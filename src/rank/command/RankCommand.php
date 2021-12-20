@@ -93,10 +93,10 @@ class RankCommand extends Command{
                     case "list":
                         if ($sender->hasPermission("command.rank.list")) {
                             $sender->sendMessage("§7[§c!§7] §e" . "-----=-----");
-                            if (!is_dir(self::getPlugin()->getDataFolder() . "Ranks") or count(scandir(self::getPlugin()->getDataFolder() . "Ranks")) < 1) {
-                                $sender->sendMessage("§cVous n'avez pas de Ranks. Faite /rank add pour ajouté un Ranks");
+                            if (!is_dir(self::getPlugin()->getDataFolder() . "ranks") or count(scandir(self::getPlugin()->getDataFolder() . "ranks")) < 1) {
+                                $sender->sendMessage("§cVous n'avez pas de ranks. Faite /rank add pour ajouté un ranks");
                             } else {
-                                foreach (scandir(self::getPlugin()->getDataFolder() . "Ranks") as $file) {
+                                foreach (scandir(self::getPlugin()->getDataFolder() . "ranks") as $file) {
                                     if (!in_array($file, array(".", ".."))) {
                                         $file = str_replace(".yml", "", $file);
                                         $sender->sendMessage("§e" . $file . "§7 : " . Main::getProviderSysteme()->getPrefix($file));

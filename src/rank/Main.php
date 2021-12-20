@@ -18,6 +18,8 @@ use rank\provider\ProviderBase;
 
 class Main extends PluginBase
 {
+    private static array $lang;
+
     private static Config $config;
 
     private static ?FactionBase $faction = null;
@@ -39,11 +41,8 @@ class Main extends PluginBase
     public function onEnable() : void {
         @mkdir($this->getDataFolder());
         $this->getLogger()->notice("Loading the Rank plugin");
-        if(!file_exists($this->getDataFolder()."config.yml")) {
-            $this->getLogger()->notice("Add config file");
-            $this->saveResource('config.yml');
-        }
-        self::$config = new Config($this->getDataFolder().'config.yml', Config::YAML);
+        $this->initConfig();
+        $this->initLanguages();
         $this->initProvider();
 
         if (!self::getProviderSysteme()->existRank(self::getProviderSysteme()->getDefaultRank())) {
@@ -67,6 +66,38 @@ class Main extends PluginBase
             return str_replace(["{NAME}", "{RANK}", "{PREFIX}", "{MSG}", "{FAC_NAME}", "{FAC_RANK}"], [$name, $rank, $prefix, $msg, self::getFactionSysteme()->getPlayerFaction($player->getName()), self::getFactionSysteme()->getPlayerRank($player->getName())], $replace);
         } else {
             return str_replace(["{NAME}", "{RANK}", "{PREFIX}", "{MSG}"], [$name, $rank, $prefix, $msg], $replace);
+        }
+    }
+
+    public function initConfig() : void {
+        if(!file_exists($this->getDataFolder()."config.yml")) {
+            $this->getLogger()->notice("Add config file");
+            $this->saveResource('config.yml');
+        }
+        self::$config = new Config($this->getDataFolder().'config.yml', Config::YAML);
+    }
+
+    public function initLanguages() : void {
+        $this->getLogger()->info("Loading the Lang system");
+        @mkdir($this->getDataFolder()."/langs");
+
+        if (!file_exists($this->getDataFolder()."/langs/" . "fra.ini")) {
+            $this->saveResource('langs/fra.ini');
+        }
+
+        if (!file_exists($this->getDataFolder()."/langs/" . "eng.ini")) {
+            $this->saveResource('langs/eng.ini');
+        }
+
+        $file = match (strtolower($this->getConfig()->get("lang"))) {
+            "fra" => $this->getDataFolder() . "/langs/" . "fra.ini",
+            default => $this->getDataFolder() . "/langs/" . "eng.ini",
+        };
+
+        if(file_exists($file)){
+            self::$lang =  array_map('\stripcslashes', parse_ini_file($file, false, INI_SCANNER_RAW));
+        } else {
+            //WHY ?
         }
     }
 
@@ -123,5 +154,26 @@ class Main extends PluginBase
                 self::$provider->load();
                 break;
         }
+    }
+
+    public function getLanguage(string $type, array $args = array()) : string
+    {
+        if (is_null(self::$lang[$type])) {
+            return TextFormat::RED . "Error with the translation of the message";
+        }
+        $message = self::$lang[$type];
+        if (is_null($message)) {
+            $message = self::$lang["error"];
+            if (is_null($message)) {
+                return TextFormat::RED . "Error with the translation of the message";
+            }
+            return $message;
+        }
+        if (!empty($args)) {
+            foreach ($args as $arg) {
+                $message = preg_replace("/[%]/", $arg, $message);
+            }
+        }
+        return $message;
     }
 }
