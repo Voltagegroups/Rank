@@ -49,8 +49,9 @@ class Main extends PluginBase
             $this->getLogger()->notice("Default rank creation");
             self::getProviderSysteme()->addRank(self::getProviderSysteme()->getDefaultRank(), TextFormat::BOLD . self::getProviderSysteme()->getDefaultRank());
         }
-        new RankListener($this);
-        $this->getServer()->getCommandMap()->register("RankCommand", new RankCommand($this));
+
+        $this->initListener();
+        $this->initCommand();
         $this->initFaction();
     }
 
@@ -154,6 +155,15 @@ class Main extends PluginBase
                 self::$provider->load();
                 break;
         }
+    }
+
+    public function initListener() : void {
+        $this->getLogger()->info("Loading the Listener");
+        new RankListener($this);
+    }
+
+    public function initCommand() : void {
+        $this->getServer()->getCommandMap()->register("RankCommand", new RankCommand($this));
     }
 
     public function getLanguage(string $type, array $args = array()) : string

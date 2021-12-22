@@ -27,4 +27,3 @@ no-faction-rank: ""
 
 gametag-prefix-default: "§7{NAME} - {FAC_NAME} [{PREFIX}§r§7]"
 chat-prefix-default: "§f[§7{FAC_NAME}§e{FAC_RANK}§f]§7 {PREFIX}§r§7 {NAME} §f> §7{MSG}"
-

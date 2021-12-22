@@ -3,7 +3,6 @@
 namespace rank\factions\lists;
 
 use DaPigGuy\PiggyFactions\players\PlayerManager;
-use pocketmine\Player;
 use rank\factions\FactionBase;
 use rank\Main;
 
