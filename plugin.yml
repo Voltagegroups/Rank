@@ -13,13 +13,13 @@ permissions:
     default: op
   command.rank.add:
     default: op
-  command.rank.remove:
+  command.rank.del:
     default: op
   command.rank.list:
     default: op
   command.rank.addperm:
     default: op
-  command.rank.removeperm:
+  command.rank.delperm:
     default: op
   command.rank.setprefixchat:
     default: op

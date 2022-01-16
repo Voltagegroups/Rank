@@ -168,7 +168,7 @@ class Main extends PluginBase
 
     public function getLanguage(string $type, array $args = array()) : string
     {
-        if (is_null(self::$lang[$type])) {
+        if (!isset(self::$lang[$type])) {
             return TextFormat::RED . "Error with the translation of the message";
         }
         $message = self::$lang[$type];

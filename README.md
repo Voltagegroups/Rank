@@ -11,14 +11,38 @@
 ## Info
 > Note: The `master` branch may be in an unstable or even broken state during development.
 <br/>
-<b>Voltage-Groups</b> is a <i>Minecraft Bedrock Edition</i> network, using docker software.</br>
-I decided to build this <b>Voltage-Groups</b> to create an international, complete and fun server for the community. I offer Inedit games on <i>Minecraft Bedrock Edition</i> and I hope that this server will have made an impression.
-We use several languages to adapt ourselves to the different uses.
+
+##Commands
+
+Command | Description | Permission
+--- | --- | ---
+`/rank set <player> <rank>` | Set a players rank | command.rank.set
+`/rank add <rank>` | Add rank | command.rank.add
+`/rank del <rank>` | Delete rank | command.rank.del
+`/rank list` | List rank | command.rank.list
+`/rank addperm <rank> <perm>` | Add a permission to the rank | command.rank.addperm
+`/rank delperm <rank> <perm>` | Delete a permission to rank | command.rank.delperm
+`/rank setprefixchat <rank> <prefix>` | Set a rank prefix | command.rank.setprefixchat
+`/rank setprefixtag <rank> <prefix>` | Set a rank tag | command.rank.setprefixtag
+`/rank default <rank>` | Set a rank default | command.rank.default
+
+# Permissions
+
+- command.rank.access
+- command.rank.set
+- command.rank.add
+- command.rank.del
+- command.rank.list
+- command.rank.addperm
+- command.rank.delperm
+- command.rank.setprefixchat
+- command.rank.setprefixtag
+- command.rank.default
 
 ## Contents
 
 - [Features](./FEATURES.md)
-- [License](./EUPL.md)
+- [License](./LICENSE)
 
 ## Usages
 

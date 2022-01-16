@@ -8,6 +8,9 @@ use rank\Main;
 abstract class ProviderBase
 {
     private Main $plugin;
+
+    const MYSQL_PROVIDER = 1;
+    const SQLITE_PROVIDER = 2;
     
     public function __construct(Main $pg) {
         $this->plugin = $pg;
