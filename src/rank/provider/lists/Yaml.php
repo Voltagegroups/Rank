@@ -138,7 +138,7 @@ class Yaml extends ProviderBase
         $name = $player->getName();
         $rank = $this->getRank($name);
         $prefix = $this->getGameTagPrefix($rank);
-        $replace = Main::setReplace($prefix, $player);
+        $replace = self::getPlugin()->setReplace($prefix, $player);
         $player->setNameTag($replace);
     }
 

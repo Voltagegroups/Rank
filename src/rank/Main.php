@@ -26,6 +26,8 @@ class Main extends PluginBase
 
     private static ?ProviderBase $provider = null;
 
+    private array $replace = [];
+
     public static function getFactionSysteme() : ?FactionBase {
         return self::$faction;
     }
@@ -53,24 +55,26 @@ class Main extends PluginBase
         $this->initListener();
         $this->initCommand();
         $this->initFaction();
+        $this->initReplace();
     }
 
-    public static function setReplace(string $replace, Player $player, string $msg = "") : string{
-        $name = $player->getName();
-        if (!$rank = self::getProviderSysteme()->getRank($name)) {
-            $rank = self::getProviderSysteme()->getDefaultRank();
-            self::getProviderSysteme()->setRank($name, $rank);
-            self::getProviderSysteme()->updateNameTag($player);
+    public function addReplace(string $word, callable $func) : bool {
+        if (!isset($this->replace[$word])) {
+            $this->replace[$word] = $func;
+            return true;
         }
-        $prefix = self::getProviderSysteme()->getPrefix($rank);
-        if (self::$faction) {
-            return str_replace(["{NAME}", "{RANK}", "{PREFIX}", "{MSG}", "{FAC_NAME}", "{FAC_RANK}"], [$name, $rank, $prefix, $msg, self::getFactionSysteme()->getPlayerFaction($player->getName()), self::getFactionSysteme()->getPlayerRank($player->getName())], $replace);
-        } else {
-            return str_replace(["{NAME}", "{RANK}", "{PREFIX}", "{MSG}"], [$name, $rank, $prefix, $msg], $replace);
-        }
+        return false;
     }
 
-    public function initConfig() : void {
+    public function setReplace(string $replace, Player $player, string $msg = "") : string{
+        //help to optimize
+        foreach ($this->replace as $word => $function) {
+            $replace = str_replace($word, $function($player,$msg), $replace);
+        }
+        return $replace;
+    }
+
+    private function initConfig() : void {
         if(!file_exists($this->getDataFolder()."config.yml")) {
             $this->getLogger()->notice("Add config file");
             $this->saveResource('config.yml');
@@ -78,7 +82,7 @@ class Main extends PluginBase
         self::$config = new Config($this->getDataFolder().'config.yml', Config::YAML);
     }
 
-    public function initLanguages() : void {
+    private function initLanguages() : void {
         $this->getLogger()->info("Loading the Lang system");
         @mkdir($this->getDataFolder()."/langs");
 
@@ -102,7 +106,7 @@ class Main extends PluginBase
         }
     }
 
-    public function initFaction() : void {
+    private function initFaction() : void {
         $this->getLogger()->info("Loading the Faction system");
         if ($this->getConfig()->get("faction-system") === true) {
             foreach ($this->getServer()->getPluginManager()->getPlugins() as $plugin) {
@@ -131,7 +135,7 @@ class Main extends PluginBase
         $this->getLogger()->critical("The faction system has been cancelled because it has not been found");
     }
 
-    public function initProvider() : void {
+    private function initProvider() : void {
         $this->getLogger()->info("Loading the Provider system");
         switch (strtolower($this->getConfig()->get("database-provider"))) {
             case "mysql":
@@ -157,13 +161,76 @@ class Main extends PluginBase
         }
     }
 
-    public function initListener() : void {
+    private function initListener() : void {
         $this->getLogger()->info("Loading the Listener");
         new RankListener($this);
     }
 
-    public function initCommand() : void {
+    private function initCommand() : void {
         $this->getServer()->getCommandMap()->register("RankCommand", new RankCommand($this));
+    }
+
+    private function initReplace() : void {
+        $this->getLogger()->info("Loading the Replace systeme");
+        $datas =
+            [
+                "{NAME}" =>
+                    function (Player $player, string $msg = "") : string
+                    {
+                        return $player->getName();
+                    },
+                "{RANK}" =>
+                    function (Player $player, string $msg = "") : string
+                    {
+                        $name = $player->getName();
+                        $rank = self::getProviderSysteme()->getRank($name);
+                        if (is_null($rank)) {
+                            $rank = self::getProviderSysteme()->getDefaultRank();
+                            self::getProviderSysteme()->setRank($name, $rank);
+                            self::getProviderSysteme()->updateNameTag($player);
+                        }
+                        return $rank;
+                    },
+                "{PREFIX}" =>
+                    function (Player $player, string $msg = "") : string
+                    {
+                        $name = $player->getName();
+                        $rank = self::getProviderSysteme()->getRank($name);
+                        if (is_null($rank)) {
+                            $rank = self::getProviderSysteme()->getDefaultRank();
+                            self::getProviderSysteme()->setRank($name, $rank);
+                            self::getProviderSysteme()->updateNameTag($player);
+                        }
+                        return self::getProviderSysteme()->getPrefix($rank);
+                    },
+                "{MSG}" =>
+                    function (Player $player, string $msg = "") : string
+                    {
+                        return $msg;
+                    }
+            ];
+        if (self::$faction) {
+            $data2 =
+                [
+                    "{FAC_NAME}" =>
+                        function (Player $player, string $msg = "") : string
+                        {
+                            return self::getFactionSysteme()->getPlayerFaction($player->getName());
+                        },
+                    "{FAC_RANK}" =>
+                        function (Player $player, string $msg = "") : string
+                        {
+                            return  self::getFactionSysteme()->getPlayerRank($player->getName());
+                        },
+                ];
+            $datas = array_merge($datas,$data2);
+        }
+
+        foreach ($datas as $word => $data) {
+            if (!$this->addReplace($word, $data)) {
+                $this->getLogger()->warning("The Word : (" . $word . ") is already used");
+            }
+        }
     }
 
     public function getLanguage(string $type, array $args = array()) : string

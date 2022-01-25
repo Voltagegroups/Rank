@@ -39,7 +39,7 @@ class RankCommand extends Command{
                                         Main::getProviderSysteme()->setRank($name, $args[2]);
                                         $sender->sendMessage(self::getPlugin()->getLanguage("rank.set.success"));
                                         $annonce = Main::getData()->get("annonce-rank");
-                                        Server::getInstance()->broadcastMessage(Main::setReplace($annonce, $player));
+                                        Server::getInstance()->broadcastMessage(self::getPlugin()->setReplace($annonce, $player));
                                         //after reset Replace systeme
                                         return true;
                                     } else {
