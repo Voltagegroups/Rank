@@ -1,9 +1,9 @@
 <?php
 
-namespace rank\factions\lists;
+namespace Voltage\Rank\factions\lists;
 
-use rank\factions\FactionBase;
-use rank\Main;
+use Voltage\Rank\factions\FactionBase;
+use Voltage\Rank\Main;
 
 class FactionsPro extends FactionBase {
 

@@ -1,11 +1,10 @@
 <?php
 
-namespace rank\factions\lists;
+namespace Voltage\Rank\factions\lists;
 
 use Ayzrix\SimpleFaction\API\FactionsAPI;
-use pocketmine\Player;
-use rank\factions\FactionBase;
-use rank\Main;
+use Voltage\Rank\factions\FactionBase;
+use Voltage\Rank\Main;
 
 class SimpleFaction extends FactionBase {
 

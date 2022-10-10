@@ -1,5 +1,5 @@
 name: Rank
-main: rank\Main
+main: Voltage\Rank\Main
 version: 0.2
 api: 4.0.0
 authors:

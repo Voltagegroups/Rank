@@ -1,10 +1,10 @@
 <?php
 
-namespace rank\factions\lists;
+namespace Voltage\Rank\factions\lists;
 
 use BlockHorizons\FactionsPE\manager\Members;
-use rank\factions\FactionBase;
-use rank\Main;
+use Voltage\Rank\factions\FactionBase;
+use Voltage\Rank\Main;
 
 class FactionsPE extends FactionBase
 {

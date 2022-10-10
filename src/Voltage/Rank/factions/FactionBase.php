@@ -1,6 +1,6 @@
 <?php
 
-namespace rank\factions;
+namespace Voltage\Rank\factions;
 
 use pocketmine\plugin\Plugin;
 

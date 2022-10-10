@@ -1,18 +1,23 @@
+## Rank plugin pocketmine
+
 <p align="center">
-  <img src="http://image.noelshack.com/fichiers/2021/39/5/1633118741-logo-no-background.png" alt="Voltage logo" height="180" />
+  <img src="./rank.png" alt="Voltage logo" height="180" /> <br> 
+    
 </p>
 
-<h1 align="center">Voltage-Groups</h1>
-<a href="https://discord.gg/ntF6gH6NNm"><img src="https://img.shields.io/discord/814507789656784898?label=discord&color=7289DA&logo=discord" alt="Discord" /></a>
-<br/>
-----------------------
-<br/>
-
-## Info
 > Note: The `master` branch may be in an unstable or even broken state during development.
 <br/>
 
-##Commands
+## Table of Contents
+
+- [Documentation (en cours)]()
+- [Commands](#Commands)
+- [Permissions](#Permissions)
+- [Faq](#FAQ)
+- [Contents](#contents)
+- [Community](#community)
+
+## Commands
 
 Command | Description | Permission
 --- | --- | ---
@@ -39,14 +44,18 @@ Command | Description | Permission
 - command.rank.setprefixtag
 - command.rank.default
 
+## FAQ
+
+## Features
+
+- temp rank
+- perms per players
+- soon
+
 ## Contents
 
-- [Features](./FEATURES.md)
-- [License](./LICENSE)
-
-## Usages
-
-* [PocketMine-MP](https://github.com/pmmp/PocketMine-MP)
+- [License](./EUPL.md)
+- [Team](https://github.com/orgs/Voltagegroups/teams)
 
 ## Community
 
@@ -55,6 +64,7 @@ Active channels:
 - Twitter: [@voltagegroups](https://twitter.com/VoltageGroups?t=wSiFVaX5GiHx8Z-LmSC7iQ&s=09)
 - Discord: [ntF6gH6NNm](https://discord.gg/ntF6gH6NNm)
 - © Voltage-Groups
+
 <div align="center">
   <img src="http://image.noelshack.com/fichiers/2021/39/5/1633118741-logo-no-background.png" height="50" width="50" align="left"></img>
 </div>

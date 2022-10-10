@@ -1,9 +1,9 @@
 <?php
 
-namespace rank\task;
+namespace Voltage\Rank\task;
 
 use pocketmine\scheduler\AsyncTask;
-use rank\provider\ProviderBase;
+use Voltage\Rank\provider\ProviderBase;
 
 class QuerySqlTask extends AsyncTask
 {
@@ -21,8 +21,10 @@ class QuerySqlTask extends AsyncTask
         $type = $this->type;
         switch ($db) {
             case ProviderBase::MYSQL_PROVIDER:
+
                 break;
             case ProviderBase::SQLITE_PROVIDER:
+
                 break;
         }
         // TODO: Implement onRun() method.

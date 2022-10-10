@@ -1,9 +1,10 @@
 <?php
 
-namespace rank\provider;
+namespace Voltage\Rank\provider;
 
 use pocketmine\player\Player;
-use rank\Main;
+use pocketmine\utils\Config;
+use Voltage\Rank\Main;
 
 abstract class ProviderBase
 {
@@ -27,6 +28,8 @@ abstract class ProviderBase
     abstract public function existRank(string $name) : bool;
 
     abstract public function getRank(string $name) : ?string;
+
+    abstract public function getRanks() : ?array;
 
     abstract public function setRank(string $name, string $rank) : void;
 
@@ -54,13 +57,75 @@ abstract class ProviderBase
 
     abstract public function setChatPrefix(string $rank, string $prefix) : void;
 
-    abstract public function updateNameTag(Player $player) : void;
+    public function addPermWithUpdate(string $rank, string $perm) : void {
+        $this->addPerm($rank,$perm);
+        foreach ($this->plugin->getServer()->getOnlinePlayers() as $player) {
+            if ($this->getRank($player->getName()) == $rank) {
+                $this->updateNameTag($player);
+            }
+        }
+    }
 
-    abstract public function addPermByRankToPlayer(Player $player, string $rank) : void;
-    
-    public function updateAllNameTag() : void {
-        foreach ($this->getPlugin()->getServer()->getOnlinePlayers() as $player) {
+    public function removePermWithUpdate(string $rank, string $perm) : void {
+        $this->removePerm($rank,$perm);
+        foreach ($this->plugin->getServer()->getOnlinePlayers() as $player) {
+            if ($this->getRank($player->getName()) == $rank) {
+                $this->updateNameTag($player);
+            }
+        }
+    }
+
+    public function updateNameTag(Player $player) : void {
+        $name = $player->getName();
+        $rank = $this->getRank($name);
+        $prefix = $this->getGameTagPrefix($rank);
+        $replace = self::getPlugin()->setReplace($prefix, $player);
+        $player->setNameTag($replace);
+    }
+
+    public function addPermByRankToPlayer(Player $player, string $rank) : void {
+        $this->updateNameTag($player);
+        $array = $this->getPerms($rank);
+        if (is_array($array)) {
+            foreach ($array as $permission) {
+                $attachment = $player->addAttachment($this->getPlugin());
+                $attachment->setPermission($permission, true);
+                $player->addAttachment($this->getPlugin(),$permission);
+            }
+        }
+    }
+
+    public function setRankWithUpdate(string $name, string $rank) : void {
+        $this->setRank($name, $rank);
+        $player = $this->getPlugin()->getServer()->getPlayerExact($name);
+        if ($player instanceof Player) {
             $this->updateNameTag($player);
+            $this->addPermByRankToPlayer($player, $rank);
+        }
+    }
+
+    public function removeRankWithUpdate(string $rank) : void {
+        $this->removeRank($rank);
+        if ($this->existRank($default = $this->getDefaultRank())) {
+            foreach ($this->getRanks() as $name => $rankPlayer) {
+                if ($rank == $rankPlayer) {
+                    $this->setRankWithUpdate($name, $default);
+                }
+            }
+        }
+    }
+
+    public function setGameTagPrefixWithUpdate(string $rank, string $prefix) : void {
+        $this->setGameTagPrefix($rank, $prefix);
+        if ($this->existRank($rank)) {
+            foreach ($this->getRanks() as $name => $rankPlayer) {
+                if ($rank == $rankPlayer) {
+                    $player = $this->getPlugin()->getServer()->getPlayerExact($name);
+                    if ($player instanceof Player) {
+                        $this->updateNameTag($player);
+                    }
+                }
+            }
         }
     }
 
@@ -71,6 +136,16 @@ abstract class ProviderBase
     public function setDefaultRank(string $rank) : void {
         Main::getData()->set("basic-rank", $rank);
         Main::getData()->save();
+    }
+
+    public function setDefaultRankWithUpdate(string $rank) : void {
+        $oldrank = $rank;
+        $this->setDefaultRank($rank);
+        foreach ($this->getRanks() as $name => $rankPlayer) {
+            if ($oldrank == $rankPlayer) {
+                $this->setRankWithUpdate($name, $rank);
+            }
+        }
     }
 
     public function getPrefixNoFaction() : string
