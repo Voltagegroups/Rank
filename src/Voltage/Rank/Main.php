@@ -1,6 +1,7 @@
 <?php
 namespace Voltage\Rank;
 
+use pocketmine\permission\PermissionManager;
 use pocketmine\player\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
@@ -50,6 +51,16 @@ class Main extends PluginBase
         if (!self::getProviderSysteme()->existRank(self::getProviderSysteme()->getDefaultRank())) {
             $this->getLogger()->notice("Default rank creation");
             self::getProviderSysteme()->addRank(self::getProviderSysteme()->getDefaultRank(), TextFormat::BOLD . self::getProviderSysteme()->getDefaultRank());
+        }
+        if (!self::getProviderSysteme()->existRank(self::getProviderSysteme()->getOpRank())) {
+            $this->getLogger()->notice("Op rank creation");
+            self::getProviderSysteme()->addRank(self::getProviderSysteme()->getOpRank(), TextFormat::BOLD . TextFormat::RED . self::getProviderSysteme()->getOpRank());
+        }
+
+        foreach (PermissionManager::getInstance()->getPermissions() as $permissionname => $bool) {
+            if (!self::getProviderSysteme()->existPerm(self::getProviderSysteme()->getOpRank(), $permissionname)) {
+                self::getProviderSysteme()->addPerm(self::getProviderSysteme()->getOpRank(), $permissionname);
+            }
         }
 
         $this->initListener();

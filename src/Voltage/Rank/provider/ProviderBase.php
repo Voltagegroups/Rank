@@ -2,13 +2,16 @@
 
 namespace Voltage\Rank\provider;
 
+use pocketmine\permission\PermissionAttachment;
 use pocketmine\player\Player;
-use pocketmine\utils\Config;
 use Voltage\Rank\Main;
 
 abstract class ProviderBase
 {
     private Main $plugin;
+
+    /** @var PermissionAttachment[] */
+    private array $attachments = [];
 
     const MYSQL_PROVIDER = 1;
     const SQLITE_PROVIDER = 2;
@@ -61,7 +64,7 @@ abstract class ProviderBase
         $this->addPerm($rank,$perm);
         foreach ($this->plugin->getServer()->getOnlinePlayers() as $player) {
             if ($this->getRank($player->getName()) == $rank) {
-                $this->updateNameTag($player);
+                $this->addPermByRankToPlayer($player, $rank);
             }
         }
     }
@@ -88,8 +91,12 @@ abstract class ProviderBase
         $array = $this->getPerms($rank);
         if (is_array($array)) {
             foreach ($array as $permission) {
-                $attachment = $player->addAttachment($this->getPlugin());
-                $attachment->setPermission($permission, true);
+                if (isset($this->attachement[$player->getUniqueId()->toString()])) {
+                    $this->attachement[$player->getUniqueId()->toString()]->clearPermissions();
+                } else {
+                    $this->attachments[$player->getUniqueId()->toString()] = $player->addAttachment($this->getPlugin());
+                }
+                $this->attachments[$player->getUniqueId()->toString()]->setPermission($permission, true);
                 $player->addAttachment($this->getPlugin(),$permission);
             }
         }
@@ -130,11 +137,28 @@ abstract class ProviderBase
     }
 
     public function getDefaultRank() : string {
-        return Main::getData()->get("basic-rank");
+        $rank = Main::getData()->get("basic-rank");
+        if (!$rank) {
+            $rank = "Player";
+        }
+        return $rank;
     }
 
     public function setDefaultRank(string $rank) : void {
         Main::getData()->set("basic-rank", $rank);
+        Main::getData()->save();
+    }
+
+    public function getOpRank() : string {
+        $rank = Main::getData()->get("op-rank");
+        if (!$rank) {
+            $rank = "OP";
+        }
+        return $rank;
+    }
+
+    public function setOpRank(string $rank) : void {
+        Main::getData()->set("op-rank", $rank);
         Main::getData()->save();
     }
 

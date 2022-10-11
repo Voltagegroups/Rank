@@ -1,3 +1,4 @@
+# {LINE} = add line
 # {NAME} = Nom du joueur
 # {PREFIX} = Prefix du rank du joueur
 # {RANK} = Rank du joueur
@@ -17,6 +18,7 @@ mysql:
 faction-system: true
 annonce-rank: "§7[§c!§7] {NAME} §6a obtenu le grade §7{PREFIX}" #paste to fra.ini
 basic-rank: "Player"
+op-rank: "OP"
 
 no-faction: "..."
 
