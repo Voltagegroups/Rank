@@ -157,4 +157,18 @@ class Json extends ProviderBase
     {
         return $this->player->getAll();
     }
+
+    public function getRanksList(): array
+    {
+        $ranks = [];
+        foreach (scandir(self::getPlugin()->getDataFolder() . "ranks") as $file) {
+            if (!in_array($file, array(".", ".."))) {
+                if (strripos($file, ".json", -5) !== false) {
+                    $file = str_replace(".json", "", $file);
+                    $ranks[] = $file;
+                }
+            }
+        }
+        return $ranks;
+    }
 }

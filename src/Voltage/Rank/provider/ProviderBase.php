@@ -60,6 +60,8 @@ abstract class ProviderBase
 
     abstract public function setChatPrefix(string $rank, string $prefix) : void;
 
+    abstract public function getRanksList() : array;
+
     public function addPermWithUpdate(string $rank, string $perm) : void {
         $this->addPerm($rank,$perm);
         foreach ($this->plugin->getServer()->getOnlinePlayers() as $player) {

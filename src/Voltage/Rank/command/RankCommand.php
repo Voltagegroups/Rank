@@ -98,11 +98,8 @@ class RankCommand extends Command{
                             if (!is_dir(self::getPlugin()->getDataFolder() . "ranks") or count(scandir(self::getPlugin()->getDataFolder() . "ranks")) < 1) {
                                 $sender->sendMessage(self::getPlugin()->getLanguage("rank.list.unavailable"));
                             } else {
-                                foreach (scandir(self::getPlugin()->getDataFolder() . "ranks") as $file) {
-                                    if (!in_array($file, array(".", ".."))) {
-                                        $file = str_replace(".yml", "", $file);
-                                        $sender->sendMessage("§e" . $file . "§7 : " . Main::getProviderSysteme()->getPrefix($file));
-                                    }
+                                foreach (Main::getProviderSysteme()->getRanksList() as $rank) {
+                                    $sender->sendMessage("§e" . $rank . "§7 : " . Main::getProviderSysteme()->getPrefix($rank));
                                 }
                             }
                             $sender->sendMessage("§7[§c!§7] §e" . "-----=-----");

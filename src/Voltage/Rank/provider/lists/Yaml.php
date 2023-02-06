@@ -133,4 +133,18 @@ class Yaml extends ProviderBase
         $config->set("chat-prefix", $prefix);
         $config->save();
     }
+
+    public function getRanksList(): array
+    {
+        $ranks = [];
+        foreach (scandir(self::getPlugin()->getDataFolder() . "ranks") as $file) {
+            if (!in_array($file, array(".", ".."))) {
+                if (strripos($file, ".yml", -4) !== false) {
+                    $file = str_replace(".json", "", $file);
+                    $ranks[] = $file;
+                }
+            }
+        }
+        return $ranks;
+    }
 }
